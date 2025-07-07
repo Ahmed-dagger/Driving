@@ -1,0 +1,26 @@
+* {
+    direction: ltr;
+}
+
+.infoContainer {
+    border-left: 1px solid black;
+}
+
+.cartContainer {
+    margin-left: auto;
+}
+
+.dropdown-content {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    font-size: 13px;
+    position: absolute;
+    z-index: 1;
+    min-width: 150px;
+    background-color: #212121;
+    border: 2px solid #af4c4c;
+    border-radius: 0px 15px 15px 15px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+}

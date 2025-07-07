@@ -1,0 +1,31 @@
+<?php
+
+return [
+    'admins'      => 'Admins and Supervisors',
+    'name'        => 'Name',
+    'used'        => 'Used?',
+    'email'       => 'Email',
+    'categories'  => 'Categories',
+    'playlists'   => 'Playlists',
+    'desc'        => 'Description',
+    'courses'     => 'Courses',
+    'price'       => 'Price',
+    'playlist'    => 'Playlist',
+    'videos'      => 'Videos',
+    'settings'    => 'Settings',
+    'teachers'    => 'Teachers',
+    'course'      => 'Course',
+    'academics'   => 'Academics',
+    'codes'       => 'Codes',
+    'learners'    => 'Learners',
+    'phone'       => 'Phone',
+    'bio'         => 'Bio',
+    'status'      => 'Status',
+    'created_at'  => 'Created At',
+    'updated_at'  => 'Updated At',
+    'deleted_at'  => 'Deleted At',
+    'password'   => 'Password',
+    'licence_number' => 'License Number',
+    'experience_years' => 'Experience Years',
+
+];
