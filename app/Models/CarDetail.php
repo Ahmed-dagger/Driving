@@ -1,12 +1,14 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
 class CarDetail extends Model
 {
-    use HasFactory;
+    use HasFactory, InteractsWithMedia;
 
     protected $table = 'car_details';
 
@@ -21,5 +23,10 @@ class CarDetail extends Model
     public function instructor()
     {
         return $this->belongsTo(User::class, 'instructor_id');
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('car_images')->singleFile();
     }
 }

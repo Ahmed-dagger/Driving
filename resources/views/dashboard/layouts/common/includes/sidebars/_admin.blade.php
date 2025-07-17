@@ -32,5 +32,20 @@
     </a>
 </div>
 
+<div class="menu-item">
+    <a class="menu-link {{ request()->routeIS('admin.instructors.index') ? 'active' : '' }}" href="{{route('admin.instructors.index')}}">
+        <span class="menu-icon">
+            <i class="bi bi-grid fs-3"></i>
+        </span>
+        <span class="menu-title">{{ trans('dashboard/admin.instructors') }}</span>
+    </a>
+</div>
 
-
+<div class="menu-item">
+    <a class="menu-link {{ request()->routeIS('admin.packages.index') ? 'active' : '' }}" href="{{route('admin.packages.index')}}">
+        <span class="menu-icon">
+            <i class="bi bi-grid fs-3"></i>
+        </span>
+        <span class="menu-title">{{ trans('dashboard/admin.packages') }}</span>
+    </a>
+</div>

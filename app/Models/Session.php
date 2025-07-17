@@ -1,8 +1,9 @@
 <?php
+
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Session extends Model
 {
@@ -11,52 +12,39 @@ class Session extends Model
     protected $table = 'sessions';
 
     protected $fillable = [
-        'learner_id',
+        'course_request_id',
         'instructor_id',
-        'package_id',
         'date',
         'start_time',
         'end_time',
-        'location_city',
-        'location_area',
-        'has_learner_car',
-        'requires_transport',
         'price',
         'status',
+        'notes',
         'rejection_reason',
         'completed_at',
-        'notes',
+        'rate',
     ];
 
     protected $casts = [
-        'has_learner_car' => 'boolean',
-        'requires_transport' => 'boolean',
-        'completed_at' => 'datetime',
         'date' => 'date',
+        'start_time' => 'datetime:H:i',
+        'end_time' => 'datetime:H:i',
+        'completed_at' => 'datetime',
     ];
 
-    public function learner()
+    /*
+     |--------------------------------------------------------------------------
+     | Relationships
+     |--------------------------------------------------------------------------
+     */
+
+    public function courseRequest()
     {
-        return $this->belongsTo(User::class, 'learner_id');
+        return $this->belongsTo(CourseRequest::class);
     }
 
     public function instructor()
     {
         return $this->belongsTo(User::class, 'instructor_id');
-    }
-
-    public function package()
-    {
-        return $this->belongsTo(Package::class);
-    }
-
-    public function ratings()
-    {
-        return $this->hasMany(Rating::class);
-    }
-
-    public function requests()
-    {
-        return $this->hasMany(SessionRequest::class);
     }
 }

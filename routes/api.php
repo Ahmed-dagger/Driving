@@ -2,7 +2,11 @@
 
 use App\Http\Controllers\API\InstructorController;
 use App\Http\Controllers\API\Learnercontroller;
+use App\Http\Controllers\API\PackageController;
+use App\Http\Controllers\API\RequestsController;
+use App\Http\Controllers\API\SessionController;
 use App\Http\Controllers\API\Usercontroller;
+use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,16 +25,25 @@ use Illuminate\Support\Facades\Route;
 Route::group(['name' => 'App\Http\Controllers\Api'], function () {
 
     Route::apiResource('learners', LearnerController::class);
-
-    Route::apiResource('instructors', InstructorController::class);
-
     Route::post('learners/login/firebase', [LearnerController::class, 'firebaseLogin']);
 
 
-    // //----------- Google Sign-In Routes -------------//
+    Route::apiResource('instructors', InstructorController::class);
+    Route::post('instructors/documents/{user}', [InstructorController::class, 'documentUpload']);
+    Route::post('instructors/login/firebase', [InstructorController::class, 'firebaseLogin']);
+
+    Route::apiResource('sessions', SessionController::class);
+
+    Route::apiResource('packages', PackageController::class);
+
+    Route::apiResource('requests', RequestsController::class);
+
+    Route::post('requests/instructor', [RequestsController::class, 'InstructorRequests']);
+
+    Route::get('requests/general', [RequestsController::class, 'general']);
+    Route::post('requests/{request}/claim', [RequestsController::class, 'claim']);
 
 
-    // Route::post('/google/token-login', [RegisterController::class, 'googleTokenLogin']);
 
-    //----------- Google Sign-In Routes -------------//
+
 });

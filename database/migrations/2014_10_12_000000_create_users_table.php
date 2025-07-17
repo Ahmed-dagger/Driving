@@ -29,6 +29,8 @@ return new class extends Migration
             $table->integer('experience_years')->nullable();
             $table->text('bio')->nullable();
             $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->decimal('rate', 10, 2)->default(0);
+
 
             $table->rememberToken();
             $table->softDeletes();

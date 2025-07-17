@@ -18,6 +18,8 @@ return [
     'academics'   => 'Academics',
     'codes'       => 'Codes',
     'learners'    => 'Learners',
+    'instructors' => 'Instructors',
+    'sessions'    => 'Sessions',
     'phone'       => 'Phone',
     'bio'         => 'Bio',
     'status'      => 'Status',
@@ -27,5 +29,11 @@ return [
     'password'   => 'Password',
     'licence_number' => 'License Number',
     'experience_years' => 'Experience Years',
-
+    'packages'    => 'Packages',
+    'days_count' => 'Days Count',
+    'hours_count' => 'Hours Count',
+    'description' => 'Description',
+    'profile_picture' => 'Profile Picture',
+    'car_picture' => 'Car Picture',
+    'license_picture' => 'License Picture',
 ];

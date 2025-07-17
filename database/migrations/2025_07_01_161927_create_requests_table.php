@@ -11,15 +11,30 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('session_requests', function (Blueprint $table) {
+        Schema::create('requests', function (Blueprint $table) {
             $table->id();
             $table->foreignId('learner_id')->constrained('users')->onDelete('cascade');
+
+            // If null = general request for all instructors
             $table->foreignId('instructor_id')->nullable()->constrained('users')->onDelete('set null');
-            $table->foreignId('session_id')->nullable()->constrained('sessions')->onDelete('cascade');
+
+            $table->foreignId('package_id')->nullable()->constrained('packages')->onDelete('set null');
+
+            $table->date('start_date')->nullable();
+
+            $table->string('location_city');
+            $table->string('location_area');
+            $table->boolean('has_learner_car')->default(false);
+            $table->boolean('requires_transport')->default(false);
+
+            $table->decimal('total_price', 10, 2)->default(0);
+
             $table->enum('type', ['general', 'private']);
-            $table->text('notes')->nullable();
             $table->enum('status', ['pending', 'accepted', 'rejected'])->default('pending');
+
+            $table->text('notes')->nullable();
             $table->text('rejection_reason')->nullable();
+
             $table->timestamps();
         });
     }

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('days_count')->default(1);
             $table->integer('hours_count')->default(1);
             $table->decimal('price', 10, 2);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

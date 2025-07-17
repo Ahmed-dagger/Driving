@@ -13,21 +13,25 @@ return new class extends Migration
     {
         Schema::create('sessions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('learner_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('instructor_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('package_id')->nullable()->constrained('packages')->onDelete('set null');
+            $table->foreignId('request_id')->constrained('requests')->onDelete('cascade');
+
+            // You could also store instructor per session if needed:
+            $table->foreignId('instructor_id')->nullable()->constrained('users')->onDelete('set null');
+
             $table->date('date');
             $table->time('start_time');
             $table->time('end_time')->nullable();
-            $table->string('location_city');
-            $table->string('location_area');
-            $table->boolean('has_learner_car')->default(false);
-            $table->boolean('requires_transport')->default(false);
+
             $table->decimal('price', 10, 2)->default(0);
+
             $table->enum('status', ['pending', 'accepted', 'completed', 'canceled', 'rejected'])->default('pending');
-            $table->text('rejection_reason')->nullable();
+
             $table->timestamp('completed_at')->nullable();
             $table->text('notes')->nullable();
+            $table->text('rejection_reason')->nullable();
+            $table->decimal('rate', 10, 2)->default(0);
+
+
             $table->timestamps();
         });
     }
