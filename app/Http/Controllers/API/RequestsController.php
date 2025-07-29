@@ -228,10 +228,50 @@ class RequestsController extends Controller
         ]);
 
         $this->createSessionsForRequest($courseRequest);
-        
+
 
         return response()->json(['data' => $courseRequest]);
     }
+
+    public function filterByStatus()
+    {
+        // Get all course requests with related sessions
+        $allRequests = CourseRequest::with(['sessions', 'learner', 'instructor', 'package'])->get();
+
+        $newRequests = [];
+        $activeRequests = [];
+        $completedRequests = [];
+
+        foreach ($allRequests as $request) {
+            if ($request->status === 'pending') {
+                $newRequests[] = $request;
+                continue;
+            }
+
+            $sessions = $request->sessions;
+
+            if ($sessions->isEmpty()) {
+                continue;
+            }
+
+            $hasPending = $sessions->contains(function ($session) {
+                return $session->status === 'pending';
+            });
+
+            if ($request->status === 'accepted' && $hasPending) {
+                $activeRequests[] = $request;
+            } elseif (! $hasPending) {
+                $completedRequests[] = $request;
+            }
+        }
+
+        return response()->json([
+            'new' => $newRequests,
+            'active' => $activeRequests,
+            'completed' => $completedRequests,
+        ]);
+    }
+
 
     private function createSessionsForRequest(CourseRequest $request)
     {

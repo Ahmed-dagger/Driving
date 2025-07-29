@@ -50,6 +50,6 @@ class CourseRequest extends Model
 
     public function sessions()
     {
-        return $this->hasMany(Session::class);
+        return $this->hasMany(Session::class, 'request_id'); // specify the correct foreign key
     }
 }

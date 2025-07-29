@@ -60,7 +60,7 @@ Route::group(['name' => 'App\Http\Controllers\Api'], function () {
         Route::patch('{courseRequest}', [RequestsController::class, 'update']);
         Route::delete('{courseRequest}', [RequestsController::class, 'destroy']);
         Route::post('sessions', [SessionController::class, 'getByRequestId']);
-
+        Route::get('filter/status', [RequestsController::class, 'filterByStatus']);
     });
 
 
