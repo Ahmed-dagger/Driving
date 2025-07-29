@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\ChatController;
 use App\Http\Controllers\API\Instructorcontroller;
 use App\Http\Controllers\API\Learnercontroller;
 use App\Http\Controllers\API\PackageController;
@@ -61,6 +62,13 @@ Route::group(['name' => 'App\Http\Controllers\Api'], function () {
         Route::delete('{courseRequest}', [RequestsController::class, 'destroy']);
         Route::post('sessions', [SessionController::class, 'getByRequestId']);
         Route::get('filter/status', [RequestsController::class, 'filterByStatus']);
+    });
+
+    Route::prefix('chat')->group(function () {
+        Route::post('conversation', [ChatController::class, 'getOrCreateConversation']);
+        Route::post('message', [ChatController::class, 'sendMessage']);
+        Route::get('messages/{conversation_id}', [ChatController::class, 'getMessages']);
+        Route::post('messages/new', [ChatController::class, 'getNewMessages']);
     });
 
 
