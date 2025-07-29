@@ -20,7 +20,7 @@ return new class extends Migration
 
             $table->foreignId('package_id')->nullable()->constrained('packages')->onDelete('set null');
 
-            $table->date('start_date')->nullable();
+            $table->timestamp('start_date')->nullable();
 
             $table->string('location_city');
             $table->string('location_area');

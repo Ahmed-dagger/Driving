@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use App\Models\CourseRequest; // Ensure this is the correct model for requests
+use App\Models\Session;
+use Illuminate\Support\Facades\Log;
 
 class RequestsController extends Controller
 {
@@ -28,7 +30,7 @@ class RequestsController extends Controller
             'learner_id' => 'required|exists:users,id',
             'instructor_id' => 'nullable|exists:users,id',
             'package_id' => 'nullable|exists:packages,id',
-            'start_date' => 'nullable|date',
+            'start_date' => 'required|date',
             'location_city' => 'required|string',
             'location_area' => 'required|string',
             'has_learner_car' => 'boolean',
@@ -101,9 +103,21 @@ class RequestsController extends Controller
      */
     public function destroy(CourseRequest $courseRequest)
     {
-        $courseRequest->delete();
-        return response()->json(['message' => 'Course request deleted successfully.']);
+        try {
+            $deleted = $courseRequest->delete();
+
+            if (! $deleted) {
+                Log::error("Failed to delete CourseRequest ID: {$courseRequest->id}");
+                return response()->json(['message' => 'Delete failed.'], 500);
+            }
+
+            return response()->json(['message' => 'Course request deleted successfully.']);
+        } catch (\Exception $e) {
+            Log::error("Delete error: " . $e->getMessage());
+            return response()->json(['message' => 'Error deleting request.'], 500);
+        }
     }
+
 
     /**
      * Claim a general course request by an instructor.
@@ -118,6 +132,8 @@ class RequestsController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
+
+
         if ($courseRequest->instructor_id) {
             return response()->json(['message' => 'Already claimed'], 409);
         }
@@ -125,7 +141,11 @@ class RequestsController extends Controller
         $courseRequest->update([
             'instructor_id' => $validator->validated()['instructor_id'],
             'status' => 'accepted',
+            'type' => 'private',
         ]);
+
+        $this->createSessionsForRequest($courseRequest);
+
 
         return response()->json(['data' => $courseRequest]);
     }
@@ -142,7 +162,7 @@ class RequestsController extends Controller
         return response()->json(['data' => $courseRequests]);
     }
 
-    
+
     public function InstructorRequests(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -162,6 +182,78 @@ class RequestsController extends Controller
         return response()->json([
             'data' => $requests,
             'message' => 'Instructor Requests retrieved successfully.',
-        ] , 200);
+        ], 200);
+    }
+
+    public function LearnerRequests(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'learner_id' => 'required|integer|exists:users,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $validated = $validator->validated();
+
+        $requests = CourseRequest::where('learner_id', $validated['learner_id'])
+            ->with(['learner', 'instructor', 'package'])
+            ->get();
+
+        return response()->json([
+            'data' => $requests,
+            'message' => 'Learner Requests retrieved successfully.',
+        ], 200);
+    }
+
+    public function accept(Request $request, CourseRequest $courseRequest)
+    {
+        $validator = Validator::make($request->all(), [
+            'instructor_id' => 'required|exists:users,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+
+
+        if ($courseRequest->instructor_id !== $validator->validated()['instructor_id'] || $courseRequest->status === 'accepted') {
+            return response()->json(['message' => 'You cannot accept this request'], 403);
+        }
+
+        $courseRequest->update([
+            'status' => 'accepted',
+        ]);
+
+        $this->createSessionsForRequest($courseRequest);
+        
+
+        return response()->json(['data' => $courseRequest]);
+    }
+
+    private function createSessionsForRequest(CourseRequest $request)
+    {
+        $days = $request->package->days_count ?? 0;
+
+        if (!$days || !$request->start_date) {
+            return;
+        }
+
+        $startDate = \Carbon\Carbon::parse($request->start_date);
+        $sessionStart = '09:00'; // or pull from config
+        $sessionEnd = '11:00';   // or calculate dynamically
+
+        for ($i = 0; $i < $days; $i++) {
+            Session::create([
+                'request_id' => $request->id,
+                'date' => $startDate->copy()->addDays($i)->toDateString(),
+                'start_time' => $sessionStart,
+                'end_time' => $sessionEnd,
+                'instructor_id' => $request->instructor_id,
+                'learner_id' => $request->learner_id,
+            ]);
+        }
     }
 }

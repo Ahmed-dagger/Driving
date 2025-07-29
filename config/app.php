@@ -199,6 +199,7 @@ return [
         App\Providers\RepositoryServiceProvider::class,
         App\Providers\SidebarServiceProvider::class,
         ProtoneMedia\LaravelFFMpeg\Support\ServiceProvider::class,
+        Kreait\Laravel\Firebase\ServiceProvider::class,
 
     ],
 

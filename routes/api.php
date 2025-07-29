@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\API\InstructorController;
+use App\Http\Controllers\API\Instructorcontroller;
 use App\Http\Controllers\API\Learnercontroller;
 use App\Http\Controllers\API\PackageController;
 use App\Http\Controllers\API\RequestsController;
@@ -24,26 +24,52 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['name' => 'App\Http\Controllers\Api'], function () {
 
+
+
+    Route::post('instructors/documents/{user}', [Instructorcontroller::class, 'documentUpload']);
+    Route::post('instructors/register/firebase', [Instructorcontroller::class, 'firebaseRegister']);
+    Route::post('instructors/login', [Instructorcontroller::class, 'instructorLogin']);
+    Route::post('learners/login', [LearnerController::class, 'learnerLogin']);
+    Route::post('learners/register/firebase', [LearnerController::class, 'firebaseRegister']);
+
+    Route::apiResource('instructors', Instructorcontroller::class);
     Route::apiResource('learners', LearnerController::class);
-    Route::post('learners/login/firebase', [LearnerController::class, 'firebaseLogin']);
+
+    Route::post('instructors/profile', [Instructorcontroller::class, 'instructorProfile']);
+    Route::post('learners/profile', [LearnerController::class, 'learnerProfile']);
 
 
-    Route::apiResource('instructors', InstructorController::class);
-    Route::post('instructors/documents/{user}', [InstructorController::class, 'documentUpload']);
-    Route::post('instructors/login/firebase', [InstructorController::class, 'firebaseLogin']);
+    Route::post('instructors/rate/{user}', [Instructorcontroller::class, 'rate']);
 
     Route::apiResource('sessions', SessionController::class);
+    Route::post('sessions/{session}/complete', [SessionController::class, 'markCompleted']);   // Mark as completed
+    Route::post('sessions/{session}/reject', [SessionController::class, 'markRejected']);   // Mark as rejected
+    Route::post('sessions/{session}/cancel', [SessionController::class, 'markCanceled']); // Mark as canceled
+    Route::post('sessions/{session}/rate', [SessionController::class, 'rate']);
 
     Route::apiResource('packages', PackageController::class);
 
-    Route::apiResource('requests', RequestsController::class);
+    // Standard CRUD for requests can't be made with apiResource due to custom methods
+    Route::prefix('requests')->group(function () {
+        Route::get('/', [RequestsController::class, 'index']);
+        Route::post('/', [RequestsController::class, 'store']);
+        Route::get('{courseRequest}', [RequestsController::class, 'show']);
+        Route::put('{courseRequest}', [RequestsController::class, 'update']);
+        Route::patch('{courseRequest}', [RequestsController::class, 'update']);
+        Route::delete('{courseRequest}', [RequestsController::class, 'destroy']);
+        Route::post('sessions', [SessionController::class, 'getByRequestId']);
+
+    });
+
 
     Route::post('requests/instructor', [RequestsController::class, 'InstructorRequests']);
 
+    Route::post('requests/learner', [RequestsController::class, 'LearnerRequests']);
+
     Route::get('requests/general', [RequestsController::class, 'general']);
-    Route::post('requests/{request}/claim', [RequestsController::class, 'claim']);
 
+    Route::post('requests/claim/{courseRequest}', [RequestsController::class, 'claim']);
+    Route::post('requests/accept/{courseRequest}', [RequestsController::class, 'accept']);
 
-
-
+    Route::middleware('auth:sanctum')->group(function () {});
 });

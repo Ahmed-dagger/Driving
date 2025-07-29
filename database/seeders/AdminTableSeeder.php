@@ -4,6 +4,8 @@ use App\Models\Admin;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\{DB, Schema};
 use Illuminate\Support\Str;
+
+
 class AdminTableSeeder extends Seeder {
     public function run() {
         Schema::disableForeignKeyConstraints();

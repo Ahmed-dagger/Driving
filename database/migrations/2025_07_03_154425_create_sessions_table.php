@@ -17,6 +17,7 @@ return new class extends Migration
 
             // You could also store instructor per session if needed:
             $table->foreignId('instructor_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('learner_id')->nullable()->constrained('users')->onDelete('set null');
 
             $table->date('date');
             $table->time('start_time');

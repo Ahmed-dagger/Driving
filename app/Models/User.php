@@ -8,10 +8,11 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable implements HasMedia
 {
-    use HasFactory, Notifiable, SoftDeletes , InteractsWithMedia;
+    use HasFactory, Notifiable, SoftDeletes , InteractsWithMedia , HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
@@ -29,6 +30,8 @@ class User extends Authenticatable implements HasMedia
         'bio',
         'status',
         'rate',
+        'password',
+        'firebase_uid',
     ];
 
     /**

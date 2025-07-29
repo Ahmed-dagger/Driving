@@ -12,8 +12,9 @@ class Session extends Model
     protected $table = 'sessions';
 
     protected $fillable = [
-        'course_request_id',
+        'request_id',
         'instructor_id',
+        'learner_id',
         'date',
         'start_time',
         'end_time',
@@ -47,4 +48,9 @@ class Session extends Model
     {
         return $this->belongsTo(User::class, 'instructor_id');
     }
+
+    public const STATUS_PENDING = 'pending';
+    public const STATUS_COMPLETED = 'completed';
+    public const STATUS_REJECTED = 'rejected';
+    public const STATUS_CANCELED = 'canceled';
 }
