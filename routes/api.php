@@ -32,7 +32,9 @@ Route::group(['name' => 'App\Http\Controllers\Api'], function () {
     Route::post('learners/login', [LearnerController::class, 'learnerLogin']);
     Route::post('learners/register/firebase', [LearnerController::class, 'firebaseRegister']);
 
+    Route::post('instructors/update/{user}', [Instructorcontroller::class, 'update']);
     Route::apiResource('instructors', Instructorcontroller::class);
+    Route::post('learners/update/{user}', [Learnercontroller::class, 'update']);
     Route::apiResource('learners', LearnerController::class);
 
     Route::post('instructors/profile', [Instructorcontroller::class, 'instructorProfile']);

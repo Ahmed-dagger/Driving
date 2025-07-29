@@ -199,4 +199,64 @@ class InstructorController extends Controller
             'profile_image_url' => $user->getFirstMediaUrl('profile_images'),
         ]);
     }
+
+    public function update(Request $request, User $user)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'sometimes|string|max:255',
+            'email' => 'sometimes|email|max:255',
+            'phone' => 'sometimes|string|max:20',
+            'profile_image' => 'sometimes|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048',
+            'car_image' => 'sometimes|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048',
+            'license_image' => 'sometimes|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048',
+            'password' => 'sometimes|string|min:8|confirmed',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        // if(!$user->isInstructor()) {
+        //     return response()->json(['message' => 'Unauthorized. Not an instructor.'], 403);
+        // }
+
+        $data = $validator->validated();
+
+        // Handle password hashing if provided
+        if (isset($data['password'])) {
+            $data['password'] = bcrypt($data['password']);
+        }
+
+        // Update user details
+        $user->update($data);
+
+        // Handle profile image upload
+        if ($request->hasFile('profile_image')) {
+            $user
+                ->addMedia($request->file('profile_image'))
+                ->toMediaCollection('profile_images');
+        }
+
+        // Handle car image upload
+        if ($request->hasFile('car_image')) {
+            $user
+                ->addMedia($request->file('car_image'))
+                ->toMediaCollection('car_images');
+        }
+
+        // Handle license image upload
+        if ($request->hasFile('license_image')) {
+            $user
+                ->addMedia($request->file('license_image'))
+                ->toMediaCollection('license_images');
+        }
+
+        return response()->json([
+            'message' => 'Profile updated successfully.',
+            'user' => $user,
+            'profile_image_url' => $user->getFirstMediaUrl('profile_images'),
+            'car_image_url' => $user->getFirstMediaUrl('car_images'),
+            'license_image_url' => $user->getFirstMediaUrl('license_images'),
+        ]);
+    }
 }
