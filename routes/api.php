@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\API\CarController;
 use App\Http\Controllers\API\ChatController;
 use App\Http\Controllers\API\Instructorcontroller;
 use App\Http\Controllers\API\Learnercontroller;
 use App\Http\Controllers\API\PackageController;
+use App\Http\Controllers\API\RatingController;
 use App\Http\Controllers\API\RequestsController;
 use App\Http\Controllers\API\SessionController;
 use App\Http\Controllers\API\Usercontroller;
@@ -61,8 +63,23 @@ Route::group(['name' => 'App\Http\Controllers\Api'], function () {
         Route::patch('{courseRequest}', [RequestsController::class, 'update']);
         Route::delete('{courseRequest}', [RequestsController::class, 'destroy']);
         Route::post('sessions', [SessionController::class, 'getByRequestId']);
-        Route::get('filter/status', [RequestsController::class, 'filterByStatus']);
+        Route::post('filter/learner', [RequestsController::class, 'learnerFilterByStatus']);
+        Route::post('filter/instructor', [RequestsController::class, 'instructorFilterByStatus']);
     });
+
+    Route::prefix('cars')->group(function () {
+        Route::post('details', [CarController::class, 'store']);
+        Route::get('details/{carDetail}', [CarController::class, 'show']);
+        Route::put('details/{carDetail}', [CarController::class, 'update']);
+        Route::delete('details/{carDetail}', [CarController::class, 'destroy']);
+    });
+
+    Route::prefix('ratings')->group(function () {
+        Route::post('/', [RatingController::class, 'store']);
+        Route::put('{rating}', [RatingController::class, 'update']);
+        Route::get('instructor/{id}', [RatingController::class, 'getInstructorRatings']);
+    });
+
 
     Route::prefix('chat')->group(function () {
         Route::post('conversation', [ChatController::class, 'getOrCreateConversation']);

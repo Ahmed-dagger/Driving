@@ -12,7 +12,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable implements HasMedia
 {
-    use HasFactory, Notifiable, SoftDeletes , InteractsWithMedia , HasApiTokens;
+    use HasFactory, Notifiable, SoftDeletes, InteractsWithMedia, HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
@@ -80,10 +80,20 @@ class User extends Authenticatable implements HasMedia
         return $this->user_type === 'learner';
     }
 
-      public function registerMediaCollections(): void
+    public function registerMediaCollections(): void
     {
         $this->addMediaCollection('car_images')->useDisk('public')->singleFile();
         $this->addMediaCollection('license_images')->useDisk('public')->singleFile();
         $this->addMediaCollection('profile_images')->useDisk('public')->singleFile();
+    }
+
+    public function receivedRatings()
+    {
+        return $this->hasMany(Rating::class, 'instructor_id');
+    }
+
+    public function givenRatings()
+    {
+        return $this->hasMany(Rating::class, 'learner_id');
     }
 }

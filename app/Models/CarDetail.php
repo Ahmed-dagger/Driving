@@ -17,7 +17,6 @@ class CarDetail extends Model
         'car_make',
         'car_model',
         'plate_number',
-        'image',
     ];
 
     public function instructor()
