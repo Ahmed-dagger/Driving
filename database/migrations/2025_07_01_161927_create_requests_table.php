@@ -35,6 +35,7 @@ return new class extends Migration
             $table->text('notes')->nullable();
             $table->text('rejection_reason')->nullable();
 
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -8,6 +8,7 @@ use App\Http\Controllers\API\PackageController;
 use App\Http\Controllers\API\RatingController;
 use App\Http\Controllers\API\RequestsController;
 use App\Http\Controllers\API\SessionController;
+use App\Http\Controllers\API\TapPaymentController;
 use App\Http\Controllers\API\Usercontroller;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
@@ -86,7 +87,14 @@ Route::group(['name' => 'App\Http\Controllers\Api'], function () {
         Route::post('message', [ChatController::class, 'sendMessage']);
         Route::get('messages/{conversation_id}', [ChatController::class, 'getMessages']);
         Route::post('messages/new', [ChatController::class, 'getNewMessages']);
+        Route::get('conversation/user/{id}', [ChatController::class, 'getUserConversations']);
     });
+
+    Route::prefix('tap')->group(function () {
+    Route::post('/charge', [TapPaymentController::class, 'createCharge']);
+    Route::get('/charge/{id}', [TapPaymentController::class, 'retrieveCharge']);
+});
+
 
 
     Route::post('requests/instructor', [RequestsController::class, 'InstructorRequests']);

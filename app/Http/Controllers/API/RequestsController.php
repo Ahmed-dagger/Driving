@@ -30,7 +30,7 @@ class RequestsController extends Controller
             'learner_id' => 'required|exists:users,id',
             'instructor_id' => 'nullable|exists:users,id',
             'package_id' => 'nullable|exists:packages,id',
-            'start_date' => 'required|date',
+            'start_date' => 'required|date_format:d-m-Y',
             'location_city' => 'required|string',
             'location_area' => 'required|string',
             'has_learner_car' => 'boolean',
@@ -168,20 +168,29 @@ class RequestsController extends Controller
         $validator = Validator::make($request->all(), [
             'instructor_id' => 'required|integer|exists:users,id',
         ]);
-
+    
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
-
+    
         $validated = $validator->validated();
-
-        $requests = CourseRequest::where('instructor_id', $validated['instructor_id'])
+    
+        // Query for general requests
+        $generalRequests = CourseRequest::where('type', 'general')
+            ->get();
+    
+        // Query for private requests
+        $privateRequests = CourseRequest::where('instructor_id', $validated['instructor_id'])
+            ->where('type', 'private')
             ->with(['instructor'])
             ->get();
-
+    
         return response()->json([
-            'data' => $requests,
-            'message' => 'Instructor Requests retrieved successfully.',
+            'data' => [
+                'general' => $generalRequests,
+                'private' => $privateRequests,
+            ],
+            'message' => 'Instructor requests retrieved successfully.',
         ], 200);
     }
 

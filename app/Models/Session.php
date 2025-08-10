@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Session extends Model
 {
-    use HasFactory;
+    use HasFactory , SoftDeletes;
 
     protected $table = 'sessions';
 
@@ -47,6 +48,11 @@ class Session extends Model
     public function instructor()
     {
         return $this->belongsTo(User::class, 'instructor_id');
+    }
+
+    public function learner()
+    {
+        return $this->belongsTo(User::class, 'learner_id');
     }
 
     public const STATUS_PENDING = 'pending';

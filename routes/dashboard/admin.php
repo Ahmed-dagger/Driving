@@ -40,6 +40,18 @@ Route::group(
 
             Route::post('packages/{id}/restore', [Dashboard\PackageController::class, 'restore'])->name('packages.restore');
 
+            Route::resource('requests', Dashboard\RequestController::class);
+
+            Route::post('requests/{id}/restore', [Dashboard\RequestController::class, 'restore'])->name('requests.restore');
+
+            Route::resource('sessions', Dashboard\SessionController::class);
+
+            Route::post('sessions/{id}/restore', [Dashboard\SessionController::class, 'restore'])->name('sessions.restore');
+
+            Route::resource('ratings', Dashboard\RatingController::class);
+
+            Route::post('ratings/{id}/restore', [Dashboard\RatingController::class, 'restore'])->name('ratings.restore');
+
             Route::resource('instructors', Dashboard\InstructorController::class);
 
             Route::post('instructors/{id}/restore', [Dashboard\InstructorController::class, 'restore'])->name('instructors.restore');

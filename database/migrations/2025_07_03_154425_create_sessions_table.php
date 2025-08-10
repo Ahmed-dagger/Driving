@@ -32,7 +32,7 @@ return new class extends Migration
             $table->text('rejection_reason')->nullable();
             $table->decimal('rate', 10, 2)->default(0);
 
-
+            $table->softDeletes(); // For soft delete functionality
             $table->timestamps();
         });
     }

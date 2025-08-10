@@ -61,4 +61,15 @@ class ChatController extends Controller
 
         return response()->json($messages);
     }
+
+    public function getUserConversations($user_id)
+    {
+        $conversations = Conversation::with(['userOne', 'userTwo', 'messages'])
+            ->where('user_one_id', $user_id)
+            ->orWhere('user_two_id', $user_id)
+            ->orderBy('updated_at', 'desc')
+            ->get();
+
+        return response()->json($conversations);
+    }
 }

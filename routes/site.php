@@ -3,6 +3,7 @@
 use App\Http\Controllers\Frontend;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use App\Http\Controllers\API\TapPaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,3 +30,13 @@ Route::group(
         require __DIR__ . '/auth.php';
     },
 );
+
+Route::get('/tap/callback', [TapPaymentController::class, 'handleCallback'])->name('tap.callback');
+
+Route::get('/payment/success', function () {
+    return 'Payment successful!';
+})->name('payment.success');
+
+Route::get('/payment/failed', function () {
+    return 'Payment failed or cancelled.';
+})->name('payment.failed');

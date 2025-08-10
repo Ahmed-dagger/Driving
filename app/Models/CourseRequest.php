@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CourseRequest extends Model
 {
-    use HasFactory;
+    use HasFactory , SoftDeletes;
 
     protected $table = 'requests';
 
@@ -15,7 +16,7 @@ class CourseRequest extends Model
         'learner_id',
         'instructor_id',
         'package_id',
-        'requested_start_date',
+        'start_date',
         'location_city',
         'location_area',
         'has_learner_car',
@@ -30,7 +31,7 @@ class CourseRequest extends Model
     protected $casts = [
         'has_learner_car' => 'boolean',
         'requires_transport' => 'boolean',
-        'requested_start_date' => 'date',
+        'start_date' => 'date',
     ];
 
     public function learner()

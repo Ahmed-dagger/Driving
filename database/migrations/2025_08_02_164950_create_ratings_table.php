@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('learner_id')->constrained('users')->onDelete('cascade');
             $table->decimal('rating', 2, 1);
             $table->text('comment')->nullable();
+            $table->softDeletes(); // For soft delete functionality
             $table->timestamps();
         });
     }

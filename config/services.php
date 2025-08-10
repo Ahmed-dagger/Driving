@@ -32,10 +32,16 @@ return [
     ],
 
     'twilio' => [
-    'sid' => env('TWILIO_ACCOUNT_SID'),
-    'token' => env('TWILIO_AUTH_TOKEN'),
-    'alpha_sender' => env('TWILIO_ALPHA_SENDER'),
-    'verify_sid' => env('TWILIO_VERIFY_SID'),
+        'sid' => env('TWILIO_ACCOUNT_SID'),
+        'token' => env('TWILIO_AUTH_TOKEN'),
+        'alpha_sender' => env('TWILIO_ALPHA_SENDER'),
+        'verify_sid' => env('TWILIO_VERIFY_SID'),
+    ],
+    
+    'tap' => [
+    'secret_key' => env('TAP_SECRET_KEY'),
+    'base_url' => env('TAP_BASE_URL', 'https://api.tap.company/v2'),
 ],
+
 
 ];

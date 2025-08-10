@@ -49,3 +49,30 @@
         <span class="menu-title">{{ trans('dashboard/admin.packages') }}</span>
     </a>
 </div>
+
+<div class="menu-item">
+    <a class="menu-link {{ request()->routeIS('admin.requests.index') ? 'active' : '' }}" href="{{route('admin.requests.index')}}">
+        <span class="menu-icon">
+            <i class="bi bi-grid fs-3"></i>
+        </span>
+        <span class="menu-title">{{ trans('dashboard/admin.requests') }}</span>
+    </a>
+</div>
+
+<div class="menu-item">
+    <a class="menu-link {{ request()->routeIS('admin.sessions.index') ? 'active' : '' }}" href="{{route('admin.sessions.index')}}">
+        <span class="menu-icon">
+            <i class="bi bi-grid fs-3"></i>
+        </span>
+        <span class="menu-title">{{ trans('dashboard/admin.sessions') }}</span>
+    </a>
+</div>
+
+<div class="menu-item">
+    <a class="menu-link {{ request()->routeIS('admin.ratings.index') ? 'active' : '' }}" href="{{route('admin.ratings.index')}}">
+        <span class="menu-icon">
+            <i class="bi bi-grid fs-3"></i>
+        </span>
+        <span class="menu-title">{{ trans('dashboard/admin.ratings') }}</span>
+    </a>
+</div>
